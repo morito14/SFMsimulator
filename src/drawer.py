@@ -34,7 +34,6 @@ class Drawer(object):
         self.draw_map(self.img_slam_map)
         self.draw_pedestrian(pedestrians)
         self.draw_robot(robots)
-        pygame.draw.circle(self.screen, [0,0,0], (100, 0), 10)
         pygame.display.update()
 
         for event in pygame.event.get():
@@ -50,7 +49,7 @@ class Drawer(object):
             # screen, color, position, radius
             x_pix, y_pix = self.slam_map.posi_to_pixel(pedestrian.position[0],
                                                    pedestrian.position[1], self.zoom)
-            radius = int(pedestrian.radius / self.slam_map.resolution)
+            radius = int(pedestrian.radius / self.slam_map.resolution * self.zoom / 2.)
 
             pygame.draw.circle(self.screen, pedestrian.color, (x_pix, y_pix), radius)
 
@@ -59,6 +58,6 @@ class Drawer(object):
         for robot in robots:
             x_pix, y_pix = self.slam_map.posi_to_pixel(robot.position[0],
                                                    robot.position[1], self.zoom)
-            radius = int(robot.radius / self.slam_map.resolution)
+            radius = int(robot.radius / self.slam_map.resolution * self.zoom / 2.)
 
             pygame.draw.circle(self.screen, robot.color, (x_pix, y_pix), radius)
