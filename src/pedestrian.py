@@ -7,7 +7,7 @@ class Pedestrian(MovingObject, object):
         # initialize
         super(Pedestrian, self).__init__()
         self.radius = 0.3  # [m]
-        print("aaa")
+        self.color = [0, 0, 255]
 
 '''
     def set_status(self):

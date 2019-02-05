@@ -55,5 +55,5 @@ class Drawer(object):
                                             pedestrian.position[1], self.zoom)
             radius = int(pedestrian.radius / self.slam_map.resolution)
 
-            pygame.draw.circle(self.screen, (255, 0, 0), (col, row), radius)
+            pygame.draw.circle(self.screen, pedestrian.color, (col, row), radius)
 

@@ -9,6 +9,7 @@ class MovingObject(object):
         self.angle = 0.
         self.speed = 0.
         self.subgoal = [0., 0.]
+        self.color = [0, 0, 0]
         # social force
         self.f_wall = [0., 0.]
         self.f_pedestrian = [0., 0.]
@@ -29,6 +30,8 @@ class MovingObject(object):
             self.speed = kwargs['speed']
         if 'subgoal' in kwargs:
             self.subgoal = kwargs['subgoal']
+        if 'color' in kwargs:
+            self.color = kwargs['color']
 
 
 '''
