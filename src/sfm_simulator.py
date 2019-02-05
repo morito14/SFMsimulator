@@ -21,13 +21,8 @@ class SFMSimulator(Drawer, object):
         self.robots = []
 
     def debug(self):
-        for num in range(10):
-            self.generate_pedestrian(speed=num)
-
         self.generate_pedestrian(position=[1, 0])
         self.generate_pedestrian(position=[1, 1])
-        for pedestrian in self.pedestrians:
-            print(pedestrian.speed)
         self.generate_robot()
 
         while True:

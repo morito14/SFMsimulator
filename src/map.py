@@ -2,7 +2,6 @@
 from PIL import Image
 import numpy as np
 import yaml
-import pygame
 
 
 class Map(object):
@@ -54,12 +53,9 @@ class Map(object):
                 self.resolution, self.origin, self.width, self.resolution,
                 self.path_to_map)
 
-    def posi_to_array(self, x_m, y_m, zoom):
-        '''calc and return where the posi is'''
+    def posi_to_pixel(self, x_m, y_m, zoom):
         # /map
-        col = int((x_m - self.origin[0]) * zoom / self.resolution)
-        row = int((y_m - self.origin[1]) * zoom / self.resolution)
+        x_pix = ((x_m - self.origin[0]) / self.resolution) * zoom
+        y_pix = (self.height - int((y_m - self.origin[1]) / self.resolution)) * zoom
 
-        return col, row
-
-
+        return int(x_pix), int(y_pix)
