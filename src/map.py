@@ -54,7 +54,12 @@ class Map(object):
                 self.resolution, self.origin, self.width, self.resolution,
                 self.path_to_map)
 
-    def posi_to_array(self, x, y):
-        # convert position to row and col
+    def posi_to_array(self, x_m, y_m, zoom):
+        '''calc and return where the posi is'''
+        # /map
+        col = int((x_m - self.origin[0]) * zoom / self.resolution)
+        row = int((y_m - self.origin[1]) * zoom / self.resolution)
+
+        return col, row
 
 
