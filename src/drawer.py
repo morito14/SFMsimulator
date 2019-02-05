@@ -49,5 +49,11 @@ class Drawer(object):
         :param pedestrians:
         :return:
         """
-        pygame.draw.circle(self.screen, (255, 0, 0), (320, 240), 100)
-        return pedestrians
+        for pedestrian in pedestrians:
+            # screen, color, position, radius
+            col, row = self.slam_map.posi_to_array(pedestrian.position[0],
+                                            pedestrian.position[1], self.zoom)
+            radius = int(pedestrian.radius / self.slam_map.resolution)
+
+            pygame.draw.circle(self.screen, (255, 0, 0), (col, row), radius)
+
