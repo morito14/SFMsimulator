@@ -9,6 +9,8 @@ class Pedestrian(MovingObject, object):
         self.radius = 0.3  # [m]
         self.color = [0, 0, 255]
 
+        print('generated pedestrian')
+
 '''
     def set_status(self):
         # set status

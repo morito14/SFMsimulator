@@ -52,6 +52,8 @@ class Drawer(object):
             radius = int(pedestrian.radius / self.slam_map.resolution * self.zoom / 2.)
 
             pygame.draw.circle(self.screen, pedestrian.color, (x_pix, y_pix), radius)
+            pygame.draw.line(self.screen, (0, 0, 0),
+                             (x_pix, y_pix), (x_pix + 50, y_pix + 50), int(self.zoom))
 
     def draw_robot(self, robots):
         # screen, color, position, radius

@@ -1,3 +1,6 @@
+import numpy as np
+
+
 class MovingObject(object):
     """
     abstract class for robot, pedestrian
@@ -5,42 +8,61 @@ class MovingObject(object):
 
     def __init__(self):
         # initialize
-        self.position = [0., 0.]
+        self.position = np.zeros(2)
         self.angle = 0.
-        self.speed = 0.
-        self.subgoal = [0., 0.]
+        self.velocity = np.zeros(2)
+        self.subgoal = np.zeros(2)
         self.color = [0, 0, 0]
-        # social force
-        self.f_wall = [0., 0.]
-        self.f_pedestrian = [0., 0.]
-        self.f_destination = [0., 0.]
+        # social force (velocity vector)
+        self.f_wall = np.zeros(2)
+        self.f_pedestrian = np.zeros(2)
+        self.f_destination = np.zeros(2)
 
     def get_status(self):
         # get status(angle, position, etc)
-        return (self.position, self.angle, self.speed,
+        return (self.position, self.angle, self.velocity,
                 self.subgoal)
 
     def set_status(self, **kwargs):
         # set status
         if 'position' in kwargs:
-            self.position = kwargs['position']
+            self.position = np.array(kwargs['position'])
         if 'angle' in kwargs:
             self.angle = kwargs['angle']
-        if 'speed' in kwargs:
-            self.speed = kwargs['speed']
+        if 'velocity' in kwargs:
+            self.speed = kwargs['velocity']
         if 'subgoal' in kwargs:
             self.subgoal = kwargs['subgoal']
         if 'color' in kwargs:
             self.color = kwargs['color']
 
+        print('set -> position:{0}, angle:{1}, velocity:{2}, subgoal{3}, color{4}'.format(
+            self.position, self.angle, self.velocity, self.subgoal, self.color
+        ))
 
-'''
-    def calc_f_total(self, pedestrians, map, dt):
+    def calc_f_total(self, pedestrians, map, subgoal, dt):
         # get total force
+        self.f_wall = self.calc_f_wall(map, dt)
+        self.f_pedestrian = self.calc_f_pedestrian(pedestrians, dt)
+        self.f_destination = self.calc_f_destination(dt)
+
+        return self.f_wall + self.f_pedestrian + self.f_destination
+
+
 
     def calc_f_wall(self, map, dt):
         # calc force from wall
+        print('todo')
 
     def calc_f_pedestrian(self, pedestrians, dt):
         # calc force from the other pedestrians
-'''
+        print('todo')
+
+    def calc_f_destination(self, dt):
+        # calc force from destination
+        # unit vector for desired direction
+        e_a = (self.subgoal - self.position) / np.linalg.norm(self.subgoal - self.position)
+        print('e_a:{0}'.format(e_a))
+
+        return dt
+

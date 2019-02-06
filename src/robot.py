@@ -8,6 +8,7 @@ class Robot(MovingObject, object):
         super(Robot, self).__init__()
         self.radius = 0.3  # [m]
         self.color = [255, 0, 0]
+        print('generated robot')
 
 '''
     def set_status(self):
