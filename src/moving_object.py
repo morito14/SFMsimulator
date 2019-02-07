@@ -40,29 +40,4 @@ class MovingObject(object):
             self.position, self.angle, self.velocity, self.subgoal, self.color
         ))
 
-    def calc_f_total(self, pedestrians, map, subgoal, dt):
-        # get total force
-        self.f_wall = self.calc_f_wall(map, dt)
-        self.f_pedestrian = self.calc_f_pedestrian(pedestrians, dt)
-        self.f_destination = self.calc_f_destination(dt)
-
-        return self.f_wall + self.f_pedestrian + self.f_destination
-
-
-
-    def calc_f_wall(self, map, dt):
-        # calc force from wall
-        print('todo')
-
-    def calc_f_pedestrian(self, pedestrians, dt):
-        # calc force from the other pedestrians
-        print('todo')
-
-    def calc_f_destination(self, dt):
-        # calc force from destination
-        # unit vector for desired direction
-        e_a = (self.subgoal - self.position) / np.linalg.norm(self.subgoal - self.position)
-        print('e_a:{0}'.format(e_a))
-
-        return dt
 

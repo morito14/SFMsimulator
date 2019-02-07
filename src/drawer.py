@@ -32,8 +32,7 @@ class Drawer(object):
         """
         self.screen.fill((0, 0, 0))
         self.draw_map(self.img_slam_map)
-        self.draw_pedestrian(pedestrians)
-        self.draw_subgoal(pedestrians)
+        self.draw_pedestrian_thing(pedestrians)
         self.draw_robot(robots)
         pygame.display.update()
 
@@ -45,26 +44,36 @@ class Drawer(object):
     def draw_map(self, img_slam_map):
         self.screen.blit(img_slam_map, (0, 0))
 
-    def draw_pedestrian(self, pedestrians):
+    def draw_pedestrian_thing(self, pedestrians):
         for pedestrian in pedestrians:
             # screen, color, position, radius
-            x_pix, y_pix = self.slam_map.posi_to_pixel(pedestrian.position[0],
+            self.draw_pedestrian(pedestrian)
+            self.draw_f_destination(pedestrian)
+            self.draw_subgoal(pedestrian)
+
+    def draw_pedestrian(self, pedestrian):
+        x_pix, y_pix = self.slam_map.posi_to_pixel(pedestrian.position[0],
                                                    pedestrian.position[1], self.zoom)
-            radius = int(pedestrian.radius / self.slam_map.resolution * self.zoom / 2.)
+        radius = int(pedestrian.radius / self.slam_map.resolution * self.zoom / 2.)
+        pygame.draw.circle(self.screen, pedestrian.color, (x_pix, y_pix), radius)
 
-            pygame.draw.circle(self.screen, pedestrian.color, (x_pix, y_pix), radius)
-            pygame.draw.line(self.screen, (0, 0, 0),
-                             (x_pix, y_pix), (x_pix + 50, y_pix + 50), int(self.zoom))
+    def draw_f_destination(self, pedestrian):
+        # draw attractive force to subgoal
+        x_pix, y_pix = self.slam_map.posi_to_pixel(pedestrian.position[0],
+                                                   pedestrian.position[1], self.zoom)
+        width = int(pedestrian.f_destination[0] * self.zoom * 5)
+        height = int(pedestrian.f_destination[1] * self.zoom * 5)
+        print('x_pix:{0}, y_pix:{1}, width:{2}, height{3}'.format(x_pix, y_pix, width, height))
+        pygame.draw.line(self.screen, (0, 0, 0),
+                         (x_pix, y_pix), (x_pix + width, y_pix + height), int(self.zoom))
 
-    def draw_subgoal(self, pedestrians):
+    def draw_subgoal(self, pedestrian):
         #draw pedestrian's subgoal
-        print('draw subgoal')
-        for pedestrian in pedestrians:
-            x_pix, y_pix = self.slam_map.posi_to_pixel(pedestrian.subgoal[0],
-                                                       pedestrian.subgoal[1], self.zoom)
-            radius = int(pedestrian.radius / self.slam_map.resolution * self.zoom / 2.)
-            draw_position = [x_pix - radius, y_pix - radius, radius, radius]
-            pygame.draw.rect(self.screen, [0, 255, 0], draw_position)
+        x_pix, y_pix = self.slam_map.posi_to_pixel(pedestrian.subgoal[0],
+                                                   pedestrian.subgoal[1], self.zoom)
+        radius = int(pedestrian.radius / self.slam_map.resolution * self.zoom / 2.)
+        draw_position = [x_pix - radius, y_pix - radius, radius, radius]
+        pygame.draw.rect(self.screen, [0, 255, 0], draw_position)
 
 
 
