@@ -8,8 +8,18 @@ class Pedestrian(MovingObject, object):
         super(Pedestrian, self).__init__()
         self.radius = 0.3  # [m]
         self.color = [0, 0, 255]
+        self.desired_velocity = 1.08  # [m/s]
 
         print('generated pedestrian')
+
+    def set_status(self, **kwargs):
+        # set_status
+        if 'desired_velocity' in kwargs:
+            self.desired_velocity = kwargs['desired_velocity']
+
+        print('set -> desired_velocity:{0}'.format(self.desired_velocity))
+        super(Pedestrian, self).set_status(**kwargs)
+
 
 '''
     def set_status(self):
