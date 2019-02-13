@@ -50,6 +50,16 @@ class Drawer(object):
             self.draw_pedestrian(pedestrian)
             self.draw_f_destination(pedestrian)
             self.draw_subgoal(pedestrian)
+            self.draw_closest_wall(pedestrian)
+
+    def draw_closest_wall(self, pedestrian):
+        #  draw nearest wall
+        x_pix, y_pix = self.slam_map.posi_to_pixel(pedestrian.closest_wall[0],
+                                                   pedestrian.closest_wall[1], self.zoom)
+        radius = int(pedestrian.radius / self.slam_map.resolution * self.zoom)
+        pygame.draw.circle(self.screen, pedestrian.color, (x_pix, y_pix), radius)
+
+
 
     def draw_pedestrian(self, pedestrian):
         x_pix, y_pix = self.slam_map.posi_to_pixel(pedestrian.position[0],
