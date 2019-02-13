@@ -23,22 +23,26 @@ class Pedestrian(MovingObject, object):
         print('set -> desired_velocity:{0}'.format(self.desired_velocity))
         super(Pedestrian, self).set_status(**kwargs)
 
-    def calc_f_total(self, pedestrians, slam_map, dt):
+    def calc_f_total(self, pedestrians, slam_map):
         # get total force
-        self.f_wall = self.calc_f_wall(slam_map, dt)
-        self.f_pedestrian = self.calc_f_pedestrian(pedestrians, dt)
+        self.f_wall = self.calc_f_wall(slam_map)
+        self.f_pedestrian = self.calc_f_pedestrian(pedestrians)
         self.calc_f_destination()
 
         return self.f_wall + self.f_pedestrian + self.f_destination
 
-    def calc_f_wall(self, map, dt):
+    def calc_f_wall(self, map):
         # calc force from wall
+        row, col = map.posi_to_pixel(self.position)
         print('todo')
-        return [0, 0]
+        return row, col
 
-    def calc_f_pedestrian(self, pedestrians, dt):
+    def calc_f_pedestrian(self, pedestrians):
+        for pedestrian in pedestrians:
+            distance = np.linalg.norm(self.position - pedestrian.position)
+            print('distance:{0}'.format(distance))
+
         # calc force from the other pedestrians
-        print('todo')
         return [0, 0]
 
     def calc_f_destination(self):

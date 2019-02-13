@@ -59,3 +59,10 @@ class Map(object):
         y_pix = (self.height - int((y_m - self.origin[1]) / self.resolution)) * zoom
 
         return int(x_pix), int(y_pix)
+
+    def posi_to_matrix(self, x_m, y_m):
+        # /map
+        row = int((y_m - self.origin[0]) / self.resolution)
+        col = int((x_m - self.origin[1]) / self.resolution)
+
+        return row, col

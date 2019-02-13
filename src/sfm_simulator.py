@@ -22,7 +22,11 @@ class SFMSimulator(Drawer, object):
 
     def debug(self):
         self.generate_pedestrian(position=[0, 0], subgoal=[1, 0])
+        self.generate_pedestrian(position=[1, 0], subgoal=[1, 0])
+        self.generate_pedestrian(position=[15, 0], subgoal=[1, 0])
+        self.generate_pedestrian(position=[1, 1], subgoal=[1, 0])
         self.pedestrians[0].calc_f_destination()
+        self.pedestrians[0].calc_f_pedestrian(self.pedestrians)
         # print(self.pedestrians[0].f_wall)
         # self.generate_robot()
 
