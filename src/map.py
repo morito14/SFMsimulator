@@ -17,6 +17,7 @@ class Map(object):
         self.path_to_map = path_to_map
         (self.img_pillow,
          self.img_np,
+         self.img_bool,
          self.resolution,
          self.origin,
          self.height,
@@ -34,6 +35,7 @@ class Map(object):
         img_np = np.array(img)  # ndarray
         # binarization
         img_np = np.where(img_np < 250, 0, 255)
+        img_bool = np.where(img_np < 250, False, True)
         img_pillow = Image.fromarray(np.uint8(img_np))
 
         # open .yaml
@@ -45,7 +47,7 @@ class Map(object):
 
         height, width = img_pillow.size
 
-        return (img_pillow, img_np,
+        return (img_pillow, img_np, img_bool,
                 resolution, origin, height, width)
 
     def get_status(self):
@@ -77,3 +79,8 @@ class Map(object):
         # show ndarray matrix
         img_pillow = Image.fromarray(np.uint8(self.img_np))
         img_pillow.show()
+
+'''
+    def make_grid(self):
+        # grid
+'''

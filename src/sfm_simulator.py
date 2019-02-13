@@ -26,7 +26,7 @@ class SFMSimulator(Drawer, object):
         self.generate_pedestrian(position=[3, 0], subgoal=[1, 0])
         self.generate_pedestrian(position=[1, 1], subgoal=[1, 0])
         self.pedestrians[0].calc_f_destination()
-        self.pedestrians[0].calc_f_pedestrian(self.pedestrians)
+        self.pedestrians[0].calc_f_wall(self.slam_map)
         for pedestrian in self.pedestrians:
             self.slam_map.posi_to_matrix(pedestrian.position[0],
                                          pedestrian.position[1])
