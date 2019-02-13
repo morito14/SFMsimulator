@@ -2,6 +2,7 @@
 from PIL import Image
 import numpy as np
 import yaml
+import itertools
 
 
 class Map(object):
@@ -62,11 +63,13 @@ class Map(object):
 
     def posi_to_matrix(self, x_m, y_m):
         # /map
-        row = int((y_m - self.origin[0]) / self.resolution)
+        row = self.height - int((y_m - self.origin[1]) / self.resolution)
         col = int((x_m - self.origin[1]) / self.resolution)
 
         # for debug
-        self.img_np[row][col] = 125
+        print('row:{0}, col{1}'.format(row, col))
+        for i, j in itertools.product(range(-4, 4), range(-4, 4)):
+            self.img_np[row + i][col + j] = 120
 
         return row, col
 
