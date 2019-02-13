@@ -65,4 +65,12 @@ class Map(object):
         row = int((y_m - self.origin[0]) / self.resolution)
         col = int((x_m - self.origin[1]) / self.resolution)
 
+        # for debug
+        self.img_np[row][col] = 125
+
         return row, col
+
+    def show_ndarray(self):
+        # show ndarray matrix
+        img_pillow = Image.fromarray(np.uint8(self.img_np))
+        img_pillow.show()

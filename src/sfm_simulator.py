@@ -29,6 +29,7 @@ class SFMSimulator(Drawer, object):
         self.pedestrians[0].calc_f_pedestrian(self.pedestrians)
         # print(self.pedestrians[0].f_wall)
         # self.generate_robot()
+        self.slam_map.show_ndarray()
 
         while True:
             self.draw(self.pedestrians, self.robots)
