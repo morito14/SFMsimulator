@@ -15,6 +15,7 @@ class MovingObject(object):
         self.color = [0, 0, 0]
         # social force (velocity vector)
         self.f_wall = np.zeros(2)
+        self.closest_wall = np.zeros(2)
         self.f_pedestrian = np.zeros(2)
         self.f_destination = np.zeros(2)
 
