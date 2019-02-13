@@ -68,12 +68,19 @@ class Map(object):
         row = self.height - int((y_m - self.origin[1]) / self.resolution)
         col = int((x_m - self.origin[1]) / self.resolution)
 
-        # for debug
+        # for debug (mark the position of pedestrian)
         print('row:{0}, col{1}'.format(row, col))
         for i, j in itertools.product(range(-4, 4), range(-4, 4)):
             self.img_np[row + i][col + j] = 120
 
         return row, col
+
+    def matrix_to_posi(self, row, col):
+        # /map
+        x_m = (self.resolution * col) + self.origin[0]
+        y_m = (self.resolution * (self.height - row)) + self.origin[1]
+
+        return int(x_m), int(y_m)
 
     def show_ndarray(self):
         # show ndarray matrix
