@@ -33,10 +33,11 @@ class Pedestrian(MovingObject, object):
 
     def calc_f_wall(self, map):
         # calc force from wall
-        x_wall, y_wall = self.find_nearest_wall(map)
+        self.closest_wall[0], self.closest_wall[1] = self.find_nearest_wall(map)
 
-        print('nearest wall x_wall:{0}, y_wall:{1}'.format(x_wall, y_wall))
-        return x_wall, y_wall
+        print('closest wall:({0}, {1})'.format(self.closest_wall[0], self.closest_wall[1]))
+
+        return 0, 0
 
     def find_nearest_wall(self, map):
         # find nearest wall in map
@@ -49,19 +50,24 @@ class Pedestrian(MovingObject, object):
             for num in range(r * 2):  # right
                 col+= 1
                 if map.img_bool[row][col]:
+                    print('find!!:{0}, {1}'.format(row, col))
                     return map.matrix_to_posi(row, col)
             for num in range(r * 2):  # down
                 row+= 1
                 if map.img_bool[row][col]:
+                    print('find!!:{0}, {1}'.format(row, col))
                     return map.matrix_to_posi(row, col)
             for num in range(r * 2):  # left
                 col-= 1
                 if map.img_bool[row][col]:
+                    print('find!!:{0}, {1}'.format(row, col))
                     return map.matrix_to_posi(row, col)
             for num in range(r * 2 + 1):  # up
                 row-= 1
                 if map.img_bool[row][col]:
+                    print('find!!:{0}, {1}'.format(row, col))
                     return map.matrix_to_posi(row, col)
+            r+= 1
 
         print('error, any obstacle around the pedestrian not find....')
 

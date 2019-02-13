@@ -35,7 +35,7 @@ class Map(object):
         img_np = np.array(img)  # ndarray
         # binarization
         img_np = np.where(img_np < 250, 0, 255)
-        img_bool = np.where(img_np < 250, False, True)
+        img_bool = np.where(img_np < 250, True, False)
         img_pillow = Image.fromarray(np.uint8(img_np))
 
         # open .yaml
@@ -80,7 +80,7 @@ class Map(object):
         x_m = (self.resolution * col) + self.origin[0]
         y_m = (self.resolution * (self.height - row)) + self.origin[1]
 
-        return int(x_m), int(y_m)
+        return x_m, y_m
 
     def show_ndarray(self):
         # show ndarray matrix
