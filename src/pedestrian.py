@@ -13,6 +13,9 @@ class Pedestrian(MovingObject, object):
         self.color = [0, 0, 255]
         self.desired_velocity = 1.08  # [m/s]
         self.tau = 0.1  # relaxation time
+        # for calc_f_wall
+        self.w_Uab = 10.  # [m^2s^-2]
+        self.w_R = 0.2  # [m]
 
         print('generated pedestrian')
 
@@ -35,10 +38,18 @@ class Pedestrian(MovingObject, object):
     def calc_f_wall(self, map):
         # calc force from wall
         self.closest_wall[0], self.closest_wall[1] = self.find_closest_wall(map)
-
         print('closest wall:({0}, {1})'.format(self.closest_wall[0], self.closest_wall[1]))
 
+        r_ab = self.position - self.closest_wall
+        result = self.func_w_U(r_ab)
+
         return 0, 0
+
+    def func_w_U(self, r_ab):
+        # calc potential of Wall
+        norm = np.linalg.norm(r_ab)
+        return self.w_Uab * np.exp(-norm / self.w_R)
+
 
     def find_closest_wall(self, map):
         # find nearest wall in map
