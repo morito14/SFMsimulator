@@ -34,8 +34,8 @@ class Map(object):
         img = Image.open(path_to_map).convert('L')
         img_np = np.array(img)  # ndarray
         # binarization
-        img_np = np.where(img_np < 250, 0, 255)
-        img_bool = np.where(img_np < 250, True, False)
+        img_np = np.where(img_np < 40, 0, 255)
+        img_bool = np.where(img_np < 40, True, False)
         img_pillow = Image.fromarray(np.uint8(img_np))
 
         # open .yaml

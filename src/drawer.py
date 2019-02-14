@@ -56,8 +56,8 @@ class Drawer(object):
         #  draw nearest wall
         x_pix, y_pix = self.slam_map.posi_to_pixel(pedestrian.closest_wall[0],
                                                    pedestrian.closest_wall[1], self.zoom)
-        radius = int(pedestrian.radius / self.slam_map.resolution * self.zoom)
-        pygame.draw.circle(self.screen, pedestrian.color, (x_pix, y_pix), radius)
+        radius = int(0.1 / self.slam_map.resolution * self.zoom)
+        pygame.draw.circle(self.screen, [255, 0, 0], (x_pix, y_pix), radius)
 
 
 

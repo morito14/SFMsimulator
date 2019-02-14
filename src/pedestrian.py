@@ -1,5 +1,6 @@
 from moving_object import MovingObject
 import numpy as np
+import itertools
 
 
 class Pedestrian(MovingObject, object):
@@ -41,8 +42,9 @@ class Pedestrian(MovingObject, object):
 
     def find_nearest_wall(self, map):
         # find nearest wall in map
+        '''
+        # L1 norm (uzumaki)
         row_origin, col_origin = map.posi_to_matrix(self.position[0], self.position[1])
-
         r = 1
         while (r < 100):
             row = row_origin - r
@@ -69,7 +71,22 @@ class Pedestrian(MovingObject, object):
                     return map.matrix_to_posi(row, col)
             r+= 1
 
-        print('error, any obstacle around the pedestrian not find....')
+            print('error, any obsutacle around the pedestrian not find....')
+            '''
+
+        min_distance = 1000.
+        for row, col in itertools.product(range(map.height), range(map.width)):
+            if map.img_bool[row][col]:
+                map_x, map_y = map.matrix_to_posi(row, col)
+                distance = np.linalg.norm([map_x - self.position[0], map_y - self.position[1]])
+                if distance < min_distance:
+                    min_distance = distance
+                    min_row = row
+                    min_col = col
+
+        return map.matrix_to_posi(min_row, min_col)
+
+
 
     def calc_f_pedestrian(self, pedestrians):
         for pedestrian in pedestrians:
