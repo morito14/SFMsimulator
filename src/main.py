@@ -5,4 +5,3 @@ sfm_simulator = SFMSimulator("maps/mikawalab.pgm", "maps/mikawalab.yaml", zoom=3
 sfm_simulator.debug()
 
 
-# test test test test aityan
