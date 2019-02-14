@@ -34,13 +34,13 @@ class Pedestrian(MovingObject, object):
 
     def calc_f_wall(self, map):
         # calc force from wall
-        self.closest_wall[0], self.closest_wall[1] = self.find_nearest_wall(map)
+        self.closest_wall[0], self.closest_wall[1] = self.find_closest_wall(map)
 
         print('closest wall:({0}, {1})'.format(self.closest_wall[0], self.closest_wall[1]))
 
         return 0, 0
 
-    def find_nearest_wall(self, map):
+    def find_closest_wall(self, map):
         # find nearest wall in map
         '''
         # L1 norm (uzumaki)
@@ -83,6 +83,9 @@ class Pedestrian(MovingObject, object):
                     min_distance = distance
                     min_row = row
                     min_col = col
+
+        if min_distance > 999:
+            print('error: no neighborhood pixel found')
 
         return map.matrix_to_posi(min_row, min_col)
 
