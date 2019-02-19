@@ -29,9 +29,9 @@ class SFMSimulator(Drawer, object):
         self.generate_pedestrian(position=[-1, 1], subgoal=[1, 0])
         self.generate_pedestrian(position=[-2, 2], subgoal=[1, 0])
         for pedestrian in self.pedestrians:
-            pedestrian.calc_f_wall(self.slam_map)
-            pedestrian.calc_f_destination()
-        self.slam_map.show_ndarray()
+            pedestrian.calc_f_total(self.pedestrians, self.slam_map)
+            pedestrian.update_velocity(self.dt)
+            pedestrian.update_position(self.dt)
 
         while True:
             self.draw(self.pedestrians, self.robots)

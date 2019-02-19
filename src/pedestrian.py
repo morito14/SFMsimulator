@@ -36,6 +36,10 @@ class Pedestrian(MovingObject, object):
         g_result = 1. if wa_norm <= self.v_max else self.v_max / wa_norm
         self.velocity = wa * g_result
 
+    def update_position(self, dt):
+        # update position
+        self.position = self.position + (self.velocity * dt)
+
     def calc_f_total(self, pedestrians, slam_map):
         # get total force
         self.calc_f_wall(slam_map)
@@ -43,8 +47,6 @@ class Pedestrian(MovingObject, object):
         self.calc_f_destination()
 
         self.f_total = self.f_wall + self.f_pedestrian + self.f_destination
-
-        return self.f_total
 
     def calc_f_wall(self, map):
         # calc force from wall
