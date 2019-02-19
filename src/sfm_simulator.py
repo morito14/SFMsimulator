@@ -16,13 +16,14 @@ class SFMSimulator(Drawer, object):
         self.slam_map = Map(path_to_map, path_to_yaml)
         zoom = kwargs['zoom'] if 'zoom' in kwargs else 1
         super(SFMSimulator, self).__init__(self.slam_map, zoom)
+        self.dt = kwargs['dt'] if 'dt' in kwargs else 0.01 # time-step
         # initialize pedestrian
         self.pedestrians = []
         self.robots = []
 
     def debug(self):
         self.generate_pedestrian(position=[0, 0], subgoal=[1, 0])
-        self.generate_pedestrian(position=[1, 0], subgoal=[1, 1])
+        self.generate_pedestrian(position=[1, 0], subgoal=[1, 0])
         self.generate_pedestrian(position=[3, 0], subgoal=[1, 0])
         self.generate_pedestrian(position=[1, 1], subgoal=[1, 0])
         self.generate_pedestrian(position=[-1, 1], subgoal=[1, 0])

@@ -27,6 +27,10 @@ class Pedestrian(MovingObject, object):
         print('set -> desired_velocity:{0}'.format(self.desired_velocity))
         super(Pedestrian, self).set_status(**kwargs)
 
+    def update_velocity(self):
+        # udpate_velocity
+        self.velocity = (0, 0)
+
     def calc_f_total(self, pedestrians, slam_map):
         # get total force
         self.calc_f_wall(slam_map)
