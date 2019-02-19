@@ -26,8 +26,8 @@ class SFMSimulator(Drawer, object):
 
     def debug(self):
         print(self.slam_map.get_status())
-        self.generate_pedestrian(position=[-2, 2], subgoal=[0, 0])
-        self.generate_pedestrian(position=[-2, -2], subgoal=[0, 0])
+        self.generate_pedestrian(position=[-2, 2], subgoal=[-2, -2])
+        self.generate_pedestrian(position=[-2, -2], subgoal=[-2, 2])
         self.generate_pedestrian(position=[0.7, -2], subgoal=[0, 0])
         self.generate_pedestrian(position=[1., 2], subgoal=[0, 0])
 

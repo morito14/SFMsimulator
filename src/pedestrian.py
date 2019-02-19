@@ -153,6 +153,7 @@ class Pedestrian(MovingObject, object):
         for pedestrian in pedestrians:
             distance = np.linalg.norm(self.position - pedestrian.position)
             # print('distance:{0}'.format(distance))
+            # TODO: implement
 
         # calc force from the other pedestrians
         return [0, 0]
