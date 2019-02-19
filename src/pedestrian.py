@@ -16,6 +16,7 @@ class Pedestrian(MovingObject, object):
         # for calc_f_wall
         self.w_Uab = 10.  # [m^2s^-2]
         self.w_R = 0.2  # [m]
+        self.v_max = 1.2  # [m/s]
 
         print('generated pedestrian')
 
@@ -27,9 +28,13 @@ class Pedestrian(MovingObject, object):
         print('set -> desired_velocity:{0}'.format(self.desired_velocity))
         super(Pedestrian, self).set_status(**kwargs)
 
-    def update_velocity(self):
+    def update_velocity(self, dt):
         # udpate_velocity
-        self.velocity = (0, 0)
+        # wa: preferred velocity
+        wa = self.velocity + self.f_total * dt
+        wa_norm = np.linalg.norm(wa)
+        g_result = 1. if wa_norm <= self.v_max else self.v_max / wa_norm
+        self.velocity = wa * g_result
 
     def calc_f_total(self, pedestrians, slam_map):
         # get total force
@@ -37,7 +42,9 @@ class Pedestrian(MovingObject, object):
         self.f_pedestrian = self.calc_f_pedestrian(pedestrians)
         self.calc_f_destination()
 
-        return self.f_wall + self.f_pedestrian + self.f_destination
+        self.f_total = self.f_wall + self.f_pedestrian + self.f_destination
+
+        return self.f_total
 
     def calc_f_wall(self, map):
         # calc force from wall

@@ -18,6 +18,7 @@ class MovingObject(object):
         self.closest_wall = np.zeros(2)
         self.f_pedestrian = np.zeros(2)
         self.f_destination = np.zeros(2)
+        self.f_total = np.zeros(2)
 
     def get_status(self):
         # get status(angle, position, etc)
