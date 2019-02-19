@@ -29,7 +29,7 @@ class Pedestrian(MovingObject, object):
 
     def calc_f_total(self, pedestrians, slam_map):
         # get total force
-        self.f_wall = self.calc_f_wall(slam_map)
+        self.calc_f_wall(slam_map)
         self.f_pedestrian = self.calc_f_pedestrian(pedestrians)
         self.calc_f_destination()
 
@@ -41,14 +41,25 @@ class Pedestrian(MovingObject, object):
         print('closest wall:({0}, {1})'.format(self.closest_wall[0], self.closest_wall[1]))
 
         r_ab = self.position - self.closest_wall
-        result = self.func_w_U(r_ab)
+        result, vx, vy = self.func_w_U(r_ab)
+        print('wall vx, vy:({0}, {1})'.format(vx, vy))
 
-        return 0, 0
+        self.f_wall[0] = vx
+        self.f_wall[1] = vy
+
+        return vx, vy
 
     def func_w_U(self, r_ab):
         # calc potential of Wall
         norm = np.linalg.norm(r_ab)
-        return self.w_Uab * np.exp(-norm / self.w_R)
+
+        result = self.w_Uab * np.exp(-norm / self.w_R)
+        # -grad(w_U)
+        vx = ((self.w_Uab * r_ab[0]) / (self.w_R * norm)) * np.exp(-norm / self.w_R)
+        vy = ((self.w_Uab * r_ab[1]) / (self.w_R * norm)) * np.exp(-norm / self.w_R)
+
+        return result, vx, vy
+
 
 
     def find_closest_wall(self, map):
