@@ -22,9 +22,10 @@ class Map(object):
          self.origin,
          self.height,
          self.width) = self.load_map(path_to_map, path_to_yaml)
+        self.walls = []
+        self.make_walls_array()
 
-    @staticmethod
-    def load_map(path_to_map, path_to_yaml):
+    def load_map(self, path_to_map, path_to_yaml):
         """
         load map (.pgm)
         :param path_to_map: String
@@ -49,6 +50,13 @@ class Map(object):
 
         return (img_pillow, img_np, img_bool,
                 resolution, origin, height, width)
+
+    def make_walls_array(self):
+        # for finding nearest wall
+        for row, col in itertools.product(range(self.height), range(self.width)):
+            if self.img_bool[row][col]:
+                x, y = self.matrix_to_posi(row, col)
+                self.walls.append([x, y])
 
     def get_status(self):
         # get loaded map

@@ -11,12 +11,12 @@ class Pedestrian(MovingObject, object):
         super(Pedestrian, self).__init__()
         self.radius = 0.3  # [m]
         self.color = [0, 0, 255]
-        self.desired_velocity = 1.08  # [m/s]
+        self.desired_velocity = 1.34  # [m/s]
+        self.v_max = self.desired_velocity * 1.3  # [m/s]
         self.tau = 0.1  # relaxation time
         # for calc_f_wall
         self.w_Uab = 10.  # [m^2s^-2]
         self.w_R = 0.2  # [m]
-        self.v_max = 1.2  # [m/s]
 
         print('generated pedestrian')
 
@@ -51,6 +51,7 @@ class Pedestrian(MovingObject, object):
     def calc_f_wall(self, map):
         # calc force from wall
         self.closest_wall[0], self.closest_wall[1] = self.find_closest_wall(map)
+        # self.closest_wall[0], self.closest_wall[1] = 0, 0  # for debug
         print('closest wall:({0}, {1})'.format(self.closest_wall[0], self.closest_wall[1]))
 
         r_ab = self.position - self.closest_wall
@@ -78,7 +79,7 @@ class Pedestrian(MovingObject, object):
     def find_closest_wall(self, map):
         # find nearest wall in map
         '''
-        # L1 norm (uzumaki)
+        # L1 norm (guruguru)
         row_origin, col_origin = map.posi_to_matrix(self.position[0], self.position[1])
         r = 1
         while (r < 100):
@@ -129,7 +130,7 @@ class Pedestrian(MovingObject, object):
     def calc_f_pedestrian(self, pedestrians):
         for pedestrian in pedestrians:
             distance = np.linalg.norm(self.position - pedestrian.position)
-            print('distance:{0}'.format(distance))
+            # print('distance:{0}'.format(distance))
 
         # calc force from the other pedestrians
         return [0, 0]

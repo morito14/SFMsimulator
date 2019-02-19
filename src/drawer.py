@@ -25,6 +25,7 @@ class Drawer(object):
         img_slam_map = pygame.image.load(slam_map.path_to_map)
         self.img_slam_map = pygame.transform.scale(img_slam_map, (zoomed_width, zoomed_height))
         pygame.display.set_caption("SFMsim")
+        self.font = pygame.font.Font(None, 55)
 
     def draw(self, pedestrians, robots):
         """
@@ -45,6 +46,7 @@ class Drawer(object):
         self.screen.blit(img_slam_map, (0, 0))
 
     def draw_pedestrian_thing(self, pedestrians):
+        i = 0
         for pedestrian in pedestrians:
             # screen, color, position, radius
             self.draw_pedestrian(pedestrian)
@@ -52,6 +54,8 @@ class Drawer(object):
             self.draw_subgoal(pedestrian)
             self.draw_closest_wall(pedestrian)
             self.draw_f_wall(pedestrian)
+            self.draw_velocity(pedestrian, i)
+            i += 1
 
     def draw_closest_wall(self, pedestrian):
         #  draw nearest wall
@@ -68,24 +72,29 @@ class Drawer(object):
         radius = int(pedestrian.radius / self.slam_map.resolution * self.zoom / 2.)
         pygame.draw.circle(self.screen, pedestrian.color, (x_pix, y_pix), radius)
 
+    def draw_velocity(self, pedestrian, i):
+        text = self.font.render(str(i) + '.vel:' + str(pedestrian.velocity),
+                           True, (0, 0, 255))  # 描画する文字列の設定
+        self.screen.blit(text, [20, 100 + (50 * i)])  # 文字列の表示位置
+
     def draw_f_destination(self, pedestrian):
         # draw attractive force to subgoal
         x_pix, y_pix = self.slam_map.posi_to_pixel(pedestrian.position[0],
                                                    pedestrian.position[1], self.zoom)
-        width = int(pedestrian.f_destination[0] * self.zoom * 5)
-        height = -int(pedestrian.f_destination[1] * self.zoom * 5)
+        width = int(pedestrian.f_destination[0] * self.zoom * 3)
+        height = -int(pedestrian.f_destination[1] * self.zoom * 3)
         # print('x_pix:{0}, y_pix:{1}, width:{2}, height{3}'.format(x_pix, y_pix, width, height))
-        pygame.draw.line(self.screen, (0, 0, 0),
+        pygame.draw.line(self.screen, (0, 255, 0),
                          (x_pix, y_pix), (x_pix + width, y_pix + height), int(self.zoom))
 
     def draw_f_wall(self, pedestrian):
         # draw attractive force to subgoal
         x_pix, y_pix = self.slam_map.posi_to_pixel(pedestrian.position[0],
                                                    pedestrian.position[1], self.zoom)
-        width = int(pedestrian.f_wall[0] * self.zoom * 5)
-        height = -int(pedestrian.f_wall[1] * self.zoom * 5)
+        width = int(pedestrian.f_wall[0] * self.zoom * 3)
+        height = -int(pedestrian.f_wall[1] * self.zoom * 3)
         # print('x_pix:{0}, y_pix:{1}, width:{2}, height{3}'.format(x_pix, y_pix, width, height))
-        pygame.draw.line(self.screen, (0, 0, 0),
+        pygame.draw.line(self.screen, (255, 0, 0),
                          (x_pix, y_pix), (x_pix + width, y_pix + height), int(self.zoom))
 
     def draw_subgoal(self, pedestrian):
