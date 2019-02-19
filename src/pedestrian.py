@@ -129,5 +129,10 @@ class Pedestrian(MovingObject, object):
         # print('desired_vel:{0}, e_a:{1}'.format(self.desired_velocity, e_a))
         print('f_destination:{0}'.format(f_destination))
 
+        # exception handling when pedestrian is on his/her sub-goal
+        if np.linalg.norm(self.subgoal - self.position) < 0.1:
+            f_destination[0] = 0
+            f_destination[1] = 0
+
         self.f_destination = f_destination
         return f_destination
