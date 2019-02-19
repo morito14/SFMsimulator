@@ -67,7 +67,7 @@ class Map(object):
     def posi_to_pixel(self, x_m, y_m, zoom):
         # /map
         x_pix = ((x_m - self.origin[0]) / self.resolution) * zoom
-        print('ym:{0}, origin:{1}, res:{2}'.format(y_m, self.origin, self.resolution))
+        # print('ym:{0}, origin:{1}, res:{2}'.format(y_m, self.origin, self.resolution))
         y_pix = (self.height - int((y_m - self.origin[1]) / self.resolution)) * zoom
 
         return int(x_pix), int(y_pix)
@@ -78,7 +78,7 @@ class Map(object):
         col = int((x_m - self.origin[1]) / self.resolution)
 
         # for debug (mark the position of pedestrian)
-        print('row:{0}, col{1}'.format(row, col))
+        # print('row:{0}, col{1}'.format(row, col))
         for i, j in itertools.product(range(-4, 4), range(-4, 4)):
             self.img_np[row + i][col + j] = 120
 

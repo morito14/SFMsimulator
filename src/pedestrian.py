@@ -54,12 +54,12 @@ class Pedestrian(MovingObject, object):
         # calc force from wall
         self.closest_wall[0], self.closest_wall[1] = self.find_closest_wall(map)
         # self.closest_wall[0], self.closest_wall[1] = 0, 0  # for debug
-        print('closest wall:({0}, {1})'.format(self.closest_wall[0], self.closest_wall[1]))
+        # print('closest wall:({0}, {1})'.format(self.closest_wall[0], self.closest_wall[1]))
 
         r_ab = self.position - self.closest_wall
-        print('r_ab:{0}'.format(r_ab))
+        # print('r_ab:{0}'.format(r_ab))
         result, vx, vy = self.func_w_U(r_ab)
-        print('wall vx, vy:({0}, {1})'.format(vx, vy))
+        # print('wall vx, vy:({0}, {1})'.format(vx, vy))
 
         self.f_wall[0] = vx
         self.f_wall[1] = vy

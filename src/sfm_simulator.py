@@ -19,6 +19,7 @@ class SFMSimulator(Drawer, object):
         zoom = kwargs['zoom'] if 'zoom' in kwargs else 1
         super(SFMSimulator, self).__init__(self.slam_map, zoom)
         self.dt = kwargs['dt'] if 'dt' in kwargs else 0.01 # time-step [sec]
+        self.sim_speed = kwargs['sim_speed'] if 'sim_speed' in kwargs else 1. # simulation speed [x]
         # initialize pedestrian
         self.pedestrians = []
         self.robots = []
@@ -39,7 +40,8 @@ class SFMSimulator(Drawer, object):
                 pedestrian.update_position(self.dt)
             self.draw(self.pedestrians, self.robots)
             process_time = time.time() - start
-            wait_sec = self.dt - process_time if self.dt > process_time else 0.
+            wait_sec = (self.dt / self.sim_speed) - process_time\
+                if (self.dt / self.sim_speed) > process_time else 0.
             time.sleep(wait_sec)
             # print('time(1-loop):{0}'.format(process_time))
             print('time(1-loop):{0}'.format(time.time() - start))
