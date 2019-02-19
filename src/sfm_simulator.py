@@ -24,22 +24,27 @@ class SFMSimulator(Drawer, object):
         self.robots = []
 
     def debug(self):
-        self.generate_pedestrian(position=[-2, 2], subgoal=[-2, 0])
-        self.generate_pedestrian(position=[-2, -2], subgoal=[-2, 0])
-        self.generate_pedestrian(position=[1.1, -2], subgoal=[-2, 0])
-        self.generate_pedestrian(position=[1.1, 2], subgoal=[-2, 0])
+        print(self.slam_map.get_status())
+        self.generate_pedestrian(position=[-2, 2], subgoal=[0, 0])
+        self.generate_pedestrian(position=[-2, -2], subgoal=[0, 0])
+        self.generate_pedestrian(position=[0.7, -2], subgoal=[0, 0])
+        self.generate_pedestrian(position=[1., 2], subgoal=[0, 0])
 
+        loop_count = 0
         while True:
             start = time.time()
             for pedestrian in self.pedestrians:
                 pedestrian.calc_f_total(self.pedestrians, self.slam_map)
                 pedestrian.update_velocity(self.dt)
                 pedestrian.update_position(self.dt)
-
             self.draw(self.pedestrians, self.robots)
             process_time = time.time() - start
-            print('time(1-loop):{0}'.format(process_time))
-            time.sleep(self.dt)
+            wait_sec = self.dt - process_time if self.dt > process_time else 0.
+            time.sleep(wait_sec)
+            # print('time(1-loop):{0}'.format(process_time))
+            print('time(1-loop):{0}'.format(time.time() - start))
+
+
             # if np.linalg.norm(self.pedestrians[0].subgoal - self.pedestrians[0].position) < 0.1:
             #     break
 

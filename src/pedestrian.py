@@ -29,7 +29,7 @@ class Pedestrian(MovingObject, object):
         super(Pedestrian, self).set_status(**kwargs)
 
     def update_velocity(self, dt):
-        # udpate_velocity
+        # update_velocity
         # wa: preferred velocity
         wa = self.velocity + self.f_total * dt
         wa_norm = np.linalg.norm(wa)
@@ -38,6 +38,7 @@ class Pedestrian(MovingObject, object):
 
     def update_position(self, dt):
         # update position
+        #print('update vel:{0}, dt:{1}'.format(self.velocity, dt))
         self.position = self.position + (self.velocity * dt)
 
     def calc_f_total(self, pedestrians, slam_map):
@@ -45,6 +46,7 @@ class Pedestrian(MovingObject, object):
         self.calc_f_wall(slam_map)
         self.f_pedestrian = self.calc_f_pedestrian(pedestrians)
         self.calc_f_destination()
+        # print('f_wall:{0}, f_pedestrian:{1}, f_destination:{2}'.format(self.f_wall, self.f_pedestrian, self.f_destination))
 
         self.f_total = self.f_wall + self.f_pedestrian + self.f_destination
 
@@ -55,6 +57,7 @@ class Pedestrian(MovingObject, object):
         print('closest wall:({0}, {1})'.format(self.closest_wall[0], self.closest_wall[1]))
 
         r_ab = self.position - self.closest_wall
+        print('r_ab:{0}'.format(r_ab))
         result, vx, vy = self.func_w_U(r_ab)
         print('wall vx, vy:({0}, {1})'.format(vx, vy))
 
@@ -66,11 +69,16 @@ class Pedestrian(MovingObject, object):
     def func_w_U(self, r_ab):
         # calc potential of Wall
         norm = np.linalg.norm(r_ab)
+        if norm < 0.0001:
+            print('pedestrian is on the wall....')
+            return 0, 0, 0
 
         result = self.w_Uab * np.exp(-norm / self.w_R)
         # -grad(w_U)
         vx = ((self.w_Uab * r_ab[0]) / (self.w_R * norm)) * np.exp(-norm / self.w_R)
         vy = ((self.w_Uab * r_ab[1]) / (self.w_R * norm)) * np.exp(-norm / self.w_R)
+
+
 
         return result, vx, vy
 
@@ -110,6 +118,8 @@ class Pedestrian(MovingObject, object):
             print('error, any obsutacle around the pedestrian not find....')
             '''
 
+        """
+        # zentansaku
         min_distance = 1000.
         for row, col in itertools.product(range(map.height), range(map.width)):
             if map.img_bool[row][col]:
@@ -124,6 +134,18 @@ class Pedestrian(MovingObject, object):
             print('error: no neighborhood pixel found')
 
         return map.matrix_to_posi(min_row, min_col)
+        """
+
+        min_distance = 1000.
+        for x, y in map.walls:
+            distance = ((x - self.position[0]) ** 2) + ((y - self.position[1]) ** 2)
+            if distance < min_distance:
+                min_distance = distance
+                min_x = x
+                min_y = y
+
+        return min_x, min_y
+
 
 
 

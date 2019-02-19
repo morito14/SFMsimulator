@@ -67,6 +67,7 @@ class Map(object):
     def posi_to_pixel(self, x_m, y_m, zoom):
         # /map
         x_pix = ((x_m - self.origin[0]) / self.resolution) * zoom
+        print('ym:{0}, origin:{1}, res:{2}'.format(y_m, self.origin, self.resolution))
         y_pix = (self.height - int((y_m - self.origin[1]) / self.resolution)) * zoom
 
         return int(x_pix), int(y_pix)
