@@ -3,6 +3,7 @@ from map import Map
 import pygame
 from pygame.locals import *
 import sys
+import numpy as np
 
 
 class Drawer(object):
@@ -73,7 +74,7 @@ class Drawer(object):
         pygame.draw.circle(self.screen, pedestrian.color, (x_pix, y_pix), radius)
 
     def draw_velocity(self, pedestrian, i):
-        text = self.font.render(str(i) + '.vel:' + str(pedestrian.velocity),
+        text = self.font.render(str(i) + '.vel:' + str(round(np.linalg.norm(pedestrian.velocity), 4)),
                            True, (0, 0, 255))  # 描画する文字列の設定
         self.screen.blit(text, [20, 100 + (50 * i)])  # 文字列の表示位置
 
