@@ -56,6 +56,7 @@ class Drawer(object):
             self.draw_closest_wall(pedestrian)
             self.draw_f_wall(pedestrian)
             self.draw_velocity(pedestrian, i)
+            self.draw_f_pedestrian(pedestrian)
             i += 1
 
     def draw_closest_wall(self, pedestrian):
@@ -86,6 +87,16 @@ class Drawer(object):
         height = -int(pedestrian.f_destination[1] * self.zoom * 3)
         # print('x_pix:{0}, y_pix:{1}, width:{2}, height{3}'.format(x_pix, y_pix, width, height))
         pygame.draw.line(self.screen, (0, 255, 0),
+                         (x_pix, y_pix), (x_pix + width, y_pix + height), int(self.zoom))
+
+    def draw_f_pedestrian(self, pedestrian):
+        # draw attractive force to subgoal
+        x_pix, y_pix = self.slam_map.posi_to_pixel(pedestrian.position[0],
+                                                   pedestrian.position[1], self.zoom)
+        width = int(pedestrian.f_pedestrian[0] * self.zoom * 3)
+        height = -int(pedestrian.f_pedestrian[1] * self.zoom * 3)
+        # print('x_pix:{0}, y_pix:{1}, width:{2}, height{3}'.format(x_pix, y_pix, width, height))
+        pygame.draw.line(self.screen, (0, 0, 255),
                          (x_pix, y_pix), (x_pix + width, y_pix + height), int(self.zoom))
 
     def draw_f_wall(self, pedestrian):

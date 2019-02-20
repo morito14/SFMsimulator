@@ -161,13 +161,13 @@ class Pedestrian(MovingObject, object):
         vy_total = 0.
         for pedestrian in pedestrians:
             r_ab = self.position - pedestrian.position
-            if (r_ab[0] ** 2) + (r_ab[1] ** 2) > 0.0001:
+            if 0.0001 < (r_ab[0] ** 2) + (r_ab[1] ** 2):
                 # partial differential
-                vx_tmp1 = self.func_V_ab(r_ab + [epsilon, 0.], pedestrian)
-                vx_tmp2 = self.func_V_ab(r_ab - [epsilon, 0.], pedestrian)
+                vx_tmp1 = - self.func_V_ab(r_ab + [epsilon, 0.], pedestrian)
+                vx_tmp2 = - self.func_V_ab(r_ab - [epsilon, 0.], pedestrian)
                 vx_total =  vx_total + ((vx_tmp1 - vx_tmp2) / (2. * epsilon))
-                vy_tmp1 = self.func_V_ab(r_ab + [0., epsilon], pedestrian)
-                vy_tmp2 = self.func_V_ab(r_ab - [0., epsilon], pedestrian)
+                vy_tmp1 = - self.func_V_ab(r_ab + [0., epsilon], pedestrian)
+                vy_tmp2 = - self.func_V_ab(r_ab - [0., epsilon], pedestrian)
                 vy_total = vy_total + ((vy_tmp1 - vy_tmp2) / (2. * epsilon))
                 # print('my_posi:{0}, b_posi:{1}, result:{2}'.format(self.position, pedestrian.position, result))
                 # print('distance:{0}'.format(distance))
