@@ -21,6 +21,9 @@ class Pedestrian(MovingObject, object):
         self.p_Vab = 2.1  # [m^2s^-2]
         self.p_sigma = 0.3  # [m]
         self.p_predict_t = 1.2  # [sec]
+        self.p_phi = 100  # [degree]
+        self.p_phi_cos = np.cos(np.deg2rad(self.p_phi))
+        self.p_c = 0.5  # weight factor
 
 
         print('generated pedestrian')
@@ -157,26 +160,31 @@ class Pedestrian(MovingObject, object):
     def calc_f_pedestrian(self, pedestrians):
         print('start calc....')
         epsilon = 0.001
-        vx_total = 0.
-        vy_total = 0.
+        f_total = np.zeros(2)
         for pedestrian in pedestrians:
             r_ab = self.position - pedestrian.position
             if 0.0001 < (r_ab[0] ** 2) + (r_ab[1] ** 2):
                 # partial differential
                 vx_tmp1 = - self.func_V_ab(r_ab + [epsilon, 0.], pedestrian)
                 vx_tmp2 = - self.func_V_ab(r_ab - [epsilon, 0.], pedestrian)
-                vx_total =  vx_total + ((vx_tmp1 - vx_tmp2) / (2. * epsilon))
                 vy_tmp1 = - self.func_V_ab(r_ab + [0., epsilon], pedestrian)
                 vy_tmp2 = - self.func_V_ab(r_ab - [0., epsilon], pedestrian)
-                vy_total = vy_total + ((vy_tmp1 - vy_tmp2) / (2. * epsilon))
+                f_tmp = np.array([(vx_tmp1 - vx_tmp2) / (2. * epsilon), (vy_tmp1 - vy_tmp2) / (2. * epsilon)])
+                f_total = f_total + (self.func_w(self.e_a, -f_tmp) * f_tmp)
+                print('f_tmp:{0}'.format(f_tmp))
+
                 # print('my_posi:{0}, b_posi:{1}, result:{2}'.format(self.position, pedestrian.position, result))
                 # print('distance:{0}'.format(distance))
+        self.f_pedestrian = f_total
 
-        self.f_pedestrian[0] = vx_total
-        self.f_pedestrian[1] = vy_total
-
-        # calc force from the other pedestrians
-        return vx_total, vy_total
+    def func_w(self, e_a, f_ab):
+        # weight function for viewing angle
+        if np.dot(e_a, f_ab) >= np.linalg.norm(f_ab) * self.p_phi_cos:
+            print('in viewing angle!!!')
+            return 1.
+        else:
+            print('NOT in viewing angle!!!')
+            return self.p_c
 
     def func_V_ab(self, r_ab, pedestrian_b):
         # calc potential of pedestrians

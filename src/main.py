@@ -2,7 +2,6 @@
 from sfm_simulator import SFMSimulator
 
 sfm_simulator = SFMSimulator("maps/mikawalab.pgm", "maps/mikawalab.yaml",
-                             zoom=3, dt=0.05, sim_speed=0.5)
+                             zoom=2, dt=0.05, sim_speed=0.2)
 sfm_simulator.debug()
-
 
