@@ -17,6 +17,11 @@ class Pedestrian(MovingObject, object):
         # for calc_f_wall
         self.w_Uab = 10.  # [m^2s^-2]
         self.w_R = 0.2  # [m]
+        # for calc_f_pedestrian
+        self.p_Vab = 2.1  # [m^2s^-2]
+        self.p_sigma = 0.3  # [m]
+        self.p_predict_t = 1.2  # [sec]
+
 
         print('generated pedestrian')
 
@@ -44,7 +49,7 @@ class Pedestrian(MovingObject, object):
     def calc_f_total(self, pedestrians, slam_map):
         # get total force
         self.calc_f_wall(slam_map)
-        self.f_pedestrian = self.calc_f_pedestrian(pedestrians)
+        self.calc_f_pedestrian(pedestrians)
         self.calc_f_destination()
         # print('f_wall:{0}, f_pedestrian:{1}, f_destination:{2}'.format(self.f_wall, self.f_pedestrian, self.f_destination))
 
@@ -150,19 +155,49 @@ class Pedestrian(MovingObject, object):
 
 
     def calc_f_pedestrian(self, pedestrians):
+        print('start calc....')
+        epsilon = 0.001
+        vx_total = 0.
+        vy_total = 0.
         for pedestrian in pedestrians:
-            distance = np.linalg.norm(self.position - pedestrian.position)
-            # print('distance:{0}'.format(distance))
-            # TODO: implement
+            r_ab = self.position - pedestrian.position
+            if (r_ab[0] ** 2) + (r_ab[1] ** 2) > 0.0001:
+                # partial differential
+                vx_tmp1 = self.func_V_ab(r_ab + [epsilon, 0.], pedestrian)
+                vx_tmp2 = self.func_V_ab(r_ab - [epsilon, 0.], pedestrian)
+                vx_total =  vx_total + ((vx_tmp1 - vx_tmp2) / (2. * epsilon))
+                vy_tmp1 = self.func_V_ab(r_ab + [0., epsilon], pedestrian)
+                vy_tmp2 = self.func_V_ab(r_ab - [0., epsilon], pedestrian)
+                vy_total = vy_total + ((vy_tmp1 - vy_tmp2) / (2. * epsilon))
+                # print('my_posi:{0}, b_posi:{1}, result:{2}'.format(self.position, pedestrian.position, result))
+                # print('distance:{0}'.format(distance))
+
+        self.f_pedestrian[0] = vx_total
+        self.f_pedestrian[1] = vy_total
 
         # calc force from the other pedestrians
-        return [0, 0]
+        return vx_total, vy_total
+
+    def func_V_ab(self, r_ab, pedestrian_b):
+        # calc potential of pedestrians
+        norm = np.linalg.norm(r_ab)
+        if norm < 0.001:
+            print('error: two pedestrians are on the same position...')
+            return 100.
+
+        vb = np.linalg.norm(pedestrian_b.velocity)
+        b = (((norm + np.linalg.norm(r_ab - vb * self.p_predict_t * pedestrian_b.e_a)) ** 2
+              - (vb * self.p_predict_t) ** 2) ** 0.5) / 2.
+        result = self.p_Vab * np.exp(-b / self.p_sigma)
+
+        return result
+
 
     def calc_f_destination(self):
         # calc force from destination
         # unit vector for desired direction
-        e_a = (self.subgoal - self.position) / np.linalg.norm(self.subgoal - self.position)
-        f_destination = (self.desired_velocity * e_a - self.velocity) / self.tau
+        self.e_a = (self.subgoal - self.position) / np.linalg.norm(self.subgoal - self.position)
+        f_destination = (self.desired_velocity * self.e_a - self.velocity) / self.tau
         # print('desired_vel:{0}, e_a:{1}'.format(self.desired_velocity, e_a))
         # print('f_destination:{0}'.format(f_destination))
 

@@ -11,6 +11,7 @@ class MovingObject(object):
         self.position = np.zeros(2)
         self.angle = 0.
         self.velocity = np.zeros(2)
+        self.e_a = np.zeros(2)
         self.subgoal = np.zeros(2)
         self.color = [0, 0, 0]
         # social force (velocity vector)
